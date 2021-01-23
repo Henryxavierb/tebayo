@@ -1,12 +1,12 @@
 import React from 'react';
 
 function SearchBar(props) {
-	const {search, updateSearch} = props;
+	const {search, updateSearch, filterAnime} = props;
 	
 	return (
 		<div>
-			<input value={search} onChange={updateSearch} />
-			<button>Buscar</button>
+			<input value={search} onChange={(event) => updateSearch(event.target.value)} />
+			<button type={'button'} onClick={() => filterAnime()}>Buscar</button>
 		</div>
 	)
 }

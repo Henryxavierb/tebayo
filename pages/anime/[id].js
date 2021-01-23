@@ -7,15 +7,14 @@ function Anime({anime, categories, episodes}) {
 	}, [categories]);
 	
 	const animeData = React.useMemo(() => ({
-		// trailer: 'qig4KOK2R2g',
-		status: anime.status,
-		title: anime.canonicalTitle,
-		lastModified: anime.updatedAt,
+		status: anime.status || false,
 		thumbnails: anime.posterImage,
-		description: anime.description,
-		trailer: anime.youtubeVideoId,
-		episodeCount: anime.episodeCount,
-		ageRatingGuide: anime.ageRatingGuide,
+		title: anime.canonicalTitle || '',
+		lastModified: anime.updatedAt || '',
+		description: anime.description || '',
+		trailer: anime.youtubeVideoId || null,
+		episodeCount: anime.episodeCount || 0,
+		ageRatingGuide: anime.ageRatingGuide || '',
 	}), [anime]);
 	
 	const status = React.useMemo(() => {
@@ -41,7 +40,7 @@ function Anime({anime, categories, episodes}) {
 				</div>
 			</div>
 			
-			<p style={{ marginTop: '56px'}}>{animeData.description}</p>
+			<p style={{marginTop: '56px'}}>{animeData.description}</p>
 			
 			{animeData.trailer && (
 				<div>

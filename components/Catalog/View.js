@@ -2,16 +2,11 @@ import React from 'react';
 import AnimePreview from '../AnimePreview/View';
 
 function Catalog(props) {
-	const {animes} = props;
+	const {animes = []} = props;
 	
 	const catalog = React.useMemo(() => {
-		return animes.map(anime => ({
-			id: anime.id,
-			...anime.attributes
-		}))
+		return animes.map(anime => ({id: anime.id, ...anime.attributes}))
 	}, [animes]);
-	
-	console.log('Anime: ', catalog);
 	
 	return (
 		<ul>

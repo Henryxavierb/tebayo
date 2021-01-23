@@ -2,17 +2,24 @@ import React from 'react';
 import Link from 'next/link';
 
 function AnimePreview(props) {
-	const {id, name, thumbnail, episodeCount} = props;
+	const {id, name = '', thumbnail = '', episodeCount = 0} = props;
+	
+	const totalEpisode = React.useMemo(() => {
+		const hasOneEpisode = episodeCount === 1;
+		return hasOneEpisode ? `${episodeCount} episode` : `${episodeCount} episodes`
+	}, [episodeCount])
 	
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			<Link href="/animes/[id]" as={`/animes/${id}`}>
-				<img src={thumbnail} alt="Anime Preview" />
+		<div style={{display: 'flex', flexDirection: 'column'}}>
+			<Link href={`/anime/${id}`}>
+				<a style={{cursor: 'pointer'}}>
+					<img src={thumbnail} alt="Anime Preview" width={170}/>
+				</a>
 			</Link>
 			
-			<div style={{ display: 'flex', flexDirection: 'column' }}>
+			<div style={{display: 'flex', flexDirection: 'column'}}>
 				<span>{name}</span>
-				<span>{episodeCount} episodios</span>
+				<span>{totalEpisode}</span>
 			</div>
 		</div>
 	)
