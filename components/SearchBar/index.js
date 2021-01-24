@@ -1,7 +1,7 @@
 import React from 'react';
 
 function SearchBar(props) {
-	const {search, updateSearch, filterAnime} = props;
+	const { search, updateSearch, filterAnime } = props;
 	
 	return (
 		<div>

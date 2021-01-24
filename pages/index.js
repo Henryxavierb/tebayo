@@ -2,8 +2,9 @@ import React from 'react';
 import Head from 'next/head';
 import {API} from '../services/axios';
 import styles from '../styles/Home.module.css'
-import Catalog from "../components/Catalog/View";
-import SearchBar from "../components/SearchBar/View";
+import Catalog from "../components/Catalog";
+import SearchBar from "../components/SearchBar";
+import Pagination from "../components/Pagination";
 
 export default function Home() {
 	const [search, updateSearch] = React.useState('');
@@ -39,6 +40,11 @@ export default function Home() {
 		return `Exibindo ${animes.data?.length || 0} resultados de ${animes.meta?.count || 0}`
 	}, [animes.meta]);
 	
+	const isDisabled = {
+		nextButton: isNextButtonDisabled,
+		previousButton: isPreviosButtonDisabled,
+	}
+	
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -55,25 +61,13 @@ export default function Home() {
 				
 				<span>{animeCount}</span>
 				
-				<Catalog animes={animes.data}/>
+				<Catalog animes={animes.data} />
 				
-				<div>
-					<button
-						type={'button'}
-						disabled={isPreviosButtonDisabled}
-						onClick={() => paginate('prev')}
-					>
-						Previous
-					</button>
-					
-					<button
-						type={'button'}
-						disabled={isNextButtonDisabled}
-						onClick={() => paginate('next')}
-					>
-						Next
-					</button>
-				</div>
+				<Pagination
+					isDisabled={isDisabled}
+					onNext={() => paginate('next')}
+					onPrev={() => paginate('prev')}
+				/>
 			</main>
 		</div>
 	)
