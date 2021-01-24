@@ -1,0 +1,36 @@
+.container {
+  width: 100%;
+  display: flex;
+  margin: 20px auto;
+  justify-content: space-around;
+
+  @media(max-width: 800px) {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.btnPagination {
+  width: 200px;
+  height: 36px;
+  border: none;
+  color: #f5f5f5;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: #20B9CD;
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #148394;
+  }
+
+  @media(max-width: 800px) {
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+}

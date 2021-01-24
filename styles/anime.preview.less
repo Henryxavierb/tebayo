@@ -1,0 +1,25 @@
+.anime-preview-container, .anime-preview-container div {
+  display: flex;
+  flex-direction: column;
+}
+
+.anime-preview-container {
+  div {
+    display: flex;
+
+    span:not(:last-child) {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+}
+
+.anime-preview-container a img {
+  width: 100%;
+  max-width: 210px;
+
+  @media (max-width: 460px) {
+    width: 290px;
+    max-width: none;
+  }
+}
