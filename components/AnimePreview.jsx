@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Spinner from "./Spinner";
-
 require('../styles/anime.preview.less');
 
 function AnimePreview(props) {
@@ -18,7 +17,7 @@ function AnimePreview(props) {
 	return (
 		<div className="anime-preview-container">
 			<Link href={linkTo}>
-				<a style={{cursor: 'pointer'}} onClick={() => updateLoadingBehavior(true)}>
+				<a onClick={() => updateLoadingBehavior(true)}>
 					<img src={thumbnail} alt="Anime Preview"/>
 					{isLoading && <Spinner className="loading" />}
 				</a>
