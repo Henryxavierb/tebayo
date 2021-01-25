@@ -1,28 +1,39 @@
+import React from 'react';
 import Head from 'next/head';
 require('../styles/index.less');
 import {API} from '../services/axios';
+import Router, {useRouter} from "next/router";
 import Spinner from '../components/Spinner';
-import React, {lazy, Suspense} from 'react';
 import Catalog from "../components/Catalog";
 import SearchBar from "../components/SearchBar";
 import Pagination from "../components/Pagination";
 import AnimeCount from "../components/AnimeCount";
 
 export default function Home() {
-	const [search, updateSearch] = React.useState('');
+	const router = useRouter();
+	const {query = ''} = router.query;
+	
+	const [search, updateSearch] = React.useState(query);
 	const [animes, updateAnimes] = React.useState({});
 	const [isLoading, updateLoadingBehavior] = React.useState(true);
 	
 	async function fetchAnimes(additionalParams) {
 		const {data} = await API.get(`/anime?page[limit]=15${additionalParams}`);
+		return data;
+	}
+	
+	async function handleFetchAnime(additionalParams) {
+		updateLoadingBehavior(true);
 		
-		updateAnimes(data);
+		const collection = await fetchAnimes(additionalParams);
+		updateAnimes(collection);
+		
 		updateLoadingBehavior(false);
 	}
 	
 	React.useEffect(() => {
-		fetchAnimes()
-	}, []);
+		query ? filterAnime(query) : handleFetchAnime();
+	}, [query]);
 	
 	async function paginate(paginationType) {
 		updateLoadingBehavior(true);
@@ -33,8 +44,7 @@ export default function Home() {
 	};
 	
 	const filterAnime = React.useCallback((search) => {
-		updateLoadingBehavior(true);
-		fetchAnimes(`&filter[text]=${search}`);
+		handleFetchAnime(`&filter[text]=${search}`);
 	}, [search]);
 	
 	const isPreviosButtonDisabled = React.useMemo(() => {
@@ -66,7 +76,7 @@ export default function Home() {
 			<main>
 				<AnimeCount animes={animes}/>
 				
-				{isLoading ? <Spinner className="loader" /> : <Catalog animes={animes.data}/>}
+				{isLoading ? <Spinner className="loader"/> : <Catalog animes={animes.data}/>}
 				
 				{!isLoading && (
 					<Pagination

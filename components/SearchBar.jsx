@@ -6,7 +6,7 @@ function SearchBar(props) {
 	const {search, updateSearch, filterAnime} = props;
 	
 	return (
-		<div className="navbar">
+		<form className="navbar" onSubmit={(event) => event.preventDefault()}>
 			<Input
 				size="large"
 				value={search}
@@ -14,6 +14,7 @@ function SearchBar(props) {
 				placeholder="Search anime (Type only anime's name)"
 				onChange={(event) => updateSearch(event.target.value)}
 			/>
+			
 			<button
 				size="large"
 				type="primary"
@@ -22,7 +23,7 @@ function SearchBar(props) {
 			>
 				Buscar
 			</button>
-		</div>
+		</form>
 	)
 }
 
