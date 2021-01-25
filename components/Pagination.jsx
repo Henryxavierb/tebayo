@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/pagination.less';
+require('../styles/pagination.less');
 
 function Pagination(props) {
 	const { isDisabled, onNext, onPrev } = props;

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/catalog.less';
+require('../styles/catalog.less');
 import AnimePreview from './AnimePreview';
 
 function Catalog(props) {

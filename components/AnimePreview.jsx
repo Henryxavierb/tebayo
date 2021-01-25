@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import '../styles/anime.preview.less';
+require('../styles/anime.preview.less');
 
 function AnimePreview(props) {
 	const { id, name = '', thumbnail = '', episodeCount = 0 } = props;

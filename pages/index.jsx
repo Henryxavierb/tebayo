@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import '../styles/index.less';
+require('../styles/index.less');
 import {API} from '../services/axios';
 import Spinner from '../components/Spinner';
 import React, {lazy, Suspense} from 'react';
