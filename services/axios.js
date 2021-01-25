@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const API = axios.create({
-	baseURL: "https://kitsu.io/api/edge"
+	baseURL: process.env.NEXT_PUBLIC_BASE_URL
 })
