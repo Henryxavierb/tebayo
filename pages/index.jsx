@@ -14,7 +14,6 @@ export default function Home() {
 	const [isLoading, updateLoadingBehavior] = React.useState(true);
 	
 	async function fetchAnimes(additionalParams) {
-		// TODO: Handle behavior if input search is empty
 		const {data} = await API.get(`/anime?page[limit]=15${additionalParams}`);
 		
 		updateAnimes(data);
@@ -27,14 +26,15 @@ export default function Home() {
 	
 	async function paginate(paginationType) {
 		updateLoadingBehavior(true);
-		const {data} = await API.get(animes.links[paginationType])
+		const {data} = await API.get(animes.links[paginationType]);
+		
 		updateAnimes(data);
 		updateLoadingBehavior(false);
 	};
 	
 	const filterAnime = React.useCallback((search) => {
 		updateLoadingBehavior(true);
-		fetchAnimes(`&filter[text]=${search}`)
+		fetchAnimes(`&filter[text]=${search}`);
 	}, [search]);
 	
 	const isPreviosButtonDisabled = React.useMemo(() => {
@@ -66,7 +66,7 @@ export default function Home() {
 			<main>
 				<AnimeCount animes={animes}/>
 				
-				{isLoading ? <Spinner/> : <Catalog animes={animes.data}/>}
+				{isLoading ? <Spinner className="loader" /> : <Catalog animes={animes.data}/>}
 				
 				{!isLoading && (
 					<Pagination

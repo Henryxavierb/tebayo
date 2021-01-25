@@ -14,6 +14,17 @@
   }
 }
 
+.anime-preview-container a {
+  position: relative;
+}
+
+.loading {
+  top: 50%;
+  right: 50%;
+  z-index: -2;
+  position: absolute;
+}
+
 .anime-preview-container a img {
   width: 100%;
   max-width: 210px;
@@ -21,5 +32,14 @@
   @media (max-width: 460px) {
     width: 290px;
     max-width: none;
+  }
+
+  &:hover {
+    z-index: 5;
+    opacity: 0.3;
+  }
+
+  &:hover > .loading {
+    z-index: 10;
   }
 }

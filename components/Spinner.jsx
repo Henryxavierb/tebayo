@@ -1,9 +1,9 @@
 import React from 'react';
 import {Spin} from "antd";
 
-function Spinner() {
+function Spinner({className}) {
 	return (
-		<div className="loader">
+		<div className={className}>
 			<Spin/>
 		</div>
 	)

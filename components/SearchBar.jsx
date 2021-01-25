@@ -1,6 +1,6 @@
 import React from 'react';
 import {Input} from 'antd';
-require('../styles/searchBar.less');
+require('../styles/search.bar.less');
 
 function SearchBar(props) {
 	const {search, updateSearch, filterAnime} = props;

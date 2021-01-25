@@ -1,13 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
+import Spinner from "./Spinner";
+
 require('../styles/anime.preview.less');
 
 function AnimePreview(props) {
-	const { id, name = '', thumbnail = '', episodeCount = 0 } = props;
+	const {id, name = '', thumbnail = '', episodeCount} = props;
+	const [isLoading, updateLoadingBehavior] = React.useState(false);
 	
 	const totalEpisode = React.useMemo(() => {
-		const hasOneEpisode = episodeCount === 1;
-		return hasOneEpisode ? `${episodeCount} episode` : `${episodeCount} episodes`
+		const THERE_IS_EPISODE = episodeCount < 2;
+		return THERE_IS_EPISODE ? `${episodeCount || 0} episode` : `${episodeCount} episodes`
 	}, [episodeCount]);
 	
 	const linkTo = React.useMemo(() => `/anime/${id}`, [id]);
@@ -15,8 +18,9 @@ function AnimePreview(props) {
 	return (
 		<div className="anime-preview-container">
 			<Link href={linkTo}>
-				<a style={{cursor: 'pointer'}}>
-					<img src={thumbnail} alt="Anime Preview" />
+				<a style={{cursor: 'pointer'}} onClick={() => updateLoadingBehavior(true)}>
+					<img src={thumbnail} alt="Anime Preview"/>
+					{isLoading && <Spinner className="loading" />}
 				</a>
 			</Link>
 			
