@@ -18,7 +18,7 @@ export default function Home() {
 	const [isLoading, updateLoadingBehavior] = React.useState(true);
 	
 	async function fetchAnimeList(additionalParams = '') {
-		const {data} = await API.get(`/anime?page[limit]=20&page[offset]=50${additionalParams}`);
+		const {data} = await API.get(`/anime?page[limit]=20${additionalParams}`);
 		return data;
 	}
 	
