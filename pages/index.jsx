@@ -11,14 +11,14 @@ import AnimeCount from "../components/AnimeCount";
 
 export default function Home() {
 	const router = useRouter();
-	const {query = ''} = router.query;
+	const { query = '' } = router.query;
 	
 	const [search, updateSearch] = React.useState(query);
 	const [animeList, updateAnimeList] = React.useState({});
 	const [isLoading, updateLoadingBehavior] = React.useState(true);
 	
 	async function fetchAnimeList(additionalParams = '') {
-		const {data} = await API.get(`/anime${additionalParams}`);
+		const {data} = await API.get(`/anime?page[limit]=20&page[offset]=50${additionalParams}`);
 		return data;
 	}
 	

@@ -109,10 +109,16 @@ function Anime({anime}) {
 	)
 }
 
+/*
+	getStaticPaths can generate static page at build time to all anime included in "/anime".
+	If fallback passed on return is false, any anime not included in "/anime" will be redirect to "Not found" page.
+	However, if fallback is false, will be generate a new static page at run time.
+*/
 export async function getStaticPaths() {
 	const res = await API.get('/anime');
 	const animeList = res.data.data;
 
+	/* Getting a required param to fetch page data. In this case, anime id. */
 	const paths = animeList.map(anime => `/anime/${anime.id}`);
 	return { paths, fallback: true }
 }
