@@ -14,32 +14,32 @@ export default function Home() {
 	const {query = ''} = router.query;
 	
 	const [search, updateSearch] = React.useState(query);
-	const [animes, updateAnimes] = React.useState({});
+	const [animeList, updateAnimeList] = React.useState({});
 	const [isLoading, updateLoadingBehavior] = React.useState(true);
 	
-	async function fetchAnimes(additionalParams) {
-		const {data} = await API.get(`/anime?page[limit]=15${additionalParams}`);
+	async function fetchAnimeList(additionalParams = '') {
+		const {data} = await API.get(`/anime${additionalParams}`);
 		return data;
 	}
 	
 	async function handleFetchAnime(additionalParams) {
 		updateLoadingBehavior(true);
 		
-		const collection = await fetchAnimes(additionalParams);
-		updateAnimes(collection);
+		const collection = await fetchAnimeList(additionalParams);
+		updateAnimeList(collection);
 		
 		updateLoadingBehavior(false);
 	}
 	
 	React.useEffect(() => {
-		query ? filterAnime(query) : handleFetchAnime();
-	}, [query]);
+		handleFetchAnime();
+	}, []);
 	
 	async function paginate(paginationType) {
 		updateLoadingBehavior(true);
-		const {data} = await API.get(animes.links[paginationType]);
-		
-		updateAnimes(data);
+		const {data} = await API.get(animeList.links[paginationType]);
+
+		updateAnimeList(data);
 		updateLoadingBehavior(false);
 	};
 	
@@ -47,17 +47,17 @@ export default function Home() {
 		handleFetchAnime(`&filter[text]=${search}`);
 	}, [search]);
 	
-	const isPreviosButtonDisabled = React.useMemo(() => {
-		return !animes.links?.prev;
-	}, [animes.links]);
+	const isPreviousButtonDisabled = React.useMemo(() => {
+		return !animeList.links?.prev;
+	}, [animeList.links]);
 	
 	const isNextButtonDisabled = React.useMemo(() => {
-		return !animes.links?.next;
-	}, [animes.links]);
+		return !animeList.links?.next;
+	}, [animeList.links]);
 	
 	const isDisabled = {
 		nextButton: isNextButtonDisabled,
-		previousButton: isPreviosButtonDisabled,
+		previousButton: isPreviousButtonDisabled,
 	}
 	
 	return (
@@ -74,9 +74,9 @@ export default function Home() {
 			/>
 			
 			<main>
-				<AnimeCount animes={animes}/>
+				<AnimeCount animes={animeList}/>
 				
-				{isLoading ? <Spinner className="loader"/> : <Catalog animes={animes.data}/>}
+				{isLoading ? <Spinner className="loader"/> : <Catalog animes={animeList.data}/>}
 				
 				{!isLoading && (
 					<Pagination

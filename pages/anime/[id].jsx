@@ -1,17 +1,33 @@
 import React from 'react';
-import Router from 'next/router';
-
 require('../../styles/anime.less');
 import {API} from '../../services/axios';
+import Spinner from "../../components/Spinner";
+import Router, { useRouter } from 'next/router';
 import SearchBar from "../../components/SearchBar";
 
-function Anime({anime, categories, episodes}) {
+function Anime({anime}) {
+	const { isFallback } = useRouter();
+
+	if(isFallback) {
+		return <Spinner className="loader"/>
+	}
+
 	const [search, updateSearch] = React.useState('');
-	
+	const [categories, updateCategories] = React.useState([]);
+
+	async function fetchCategories() {
+		const categoriesData = await API.get(`/anime/${anime.id}/categories`);
+		updateCategories(categoriesData.data.data);
+	}
+
+	React.useEffect(() => {
+		fetchCategories()
+	}, []);
+
 	const getCategories = React.useMemo(() => {
 		return categories.map(category => category.attributes.title).join(', ')
 	}, [categories]);
-	
+
 	const animeData = React.useMemo(() => ({
 		status: anime.status || false,
 		thumbnails: anime.posterImage,
@@ -22,16 +38,16 @@ function Anime({anime, categories, episodes}) {
 		episodeCount: anime.episodeCount || 0,
 		ageRatingGuide: anime.ageRatingGuide || '',
 	}), [anime]);
-	
+
 	const status = React.useMemo(() => {
 		const isFinished = 'finished';
-		return animeData.status === isFinished ? 'Completo' : 'Em lançamento'
+		return animeData?.status === isFinished ? 'Completo' : 'Em lançamento'
 	}, [animeData]);
-	
+
 	const alternativeNames = React.useMemo(() => {
 		return Object.values(anime.titles).join(', ');
-	});
-	
+	}, [anime]);
+
 	const filterAnime = () => {
 		Router.push({
 			pathname: '/',
@@ -46,36 +62,36 @@ function Anime({anime, categories, episodes}) {
 				updateSearch={updateSearch}
 				filterAnime={() => filterAnime(search)}
 			/>
-			
+
 			<main>
 				<div>
 					<img src={animeData.thumbnails.small} alt={"Anime"} height={300}/>
-					
+
 					<div>
 						<h1>{animeData.title}</h1>
-						
+
 						<span>
 							<b>Alternatives name: </b>
 							{alternativeNames}
 						</span>
-						
+
 						<b>{animeData.ageRatingGuide}</b>
 						<span>
 							<b>Status: </b>
 							{status}
 						</span>
-						
+
 						<span>
 							<b>Categories: </b>
 							{getCategories}
 						</span>
 					</div>
 				</div>
-				
+
 				<p className="anime-description">{animeData.description}</p>
-				
+
 				<h1 className="trailer-title">Trailer</h1>
-				
+
 				<div className="trailer-container">
 					{animeData.trailer ? (
 						<iframe
@@ -91,23 +107,23 @@ function Anime({anime, categories, episodes}) {
 			</main>
 		</div>
 	)
-	
 }
 
-export async function getServerSideProps(context) {
-	const {id} = context.query;
-	
-	const animeData = await API.get(`/anime/${id}`);
-	const categoryData = await API.get(`/anime/${id}/categories`);
-	const episodesData = await API.get(`/anime/${id}/episodes`);
-	
+export async function getStaticPaths() {
+	const res = await API.get('/anime');
+	const animeList = res.data.data;
+
+	const paths = animeList.map(anime => `/anime/${anime.id}`);
+	return { paths, fallback: true }
+}
+
+export async function getStaticProps({ params }) {
+	const animeData = await API.get(`/anime/${params.id}`);
 	const anime = animeData.data.data;
 	
 	return {
 		props: {
 			anime: {id: anime.id, ...anime.attributes},
-			categories: categoryData.data.data,
-			episodes: episodesData.data.data,
 		}
 	}
 }
